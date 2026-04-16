@@ -1,0 +1,28 @@
+# Python bytecode (saves space)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local database 
+db.sqlite3
+db.sqlite3-journal
+
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Sensitive info 
+.env
+
+# Media and Static
+media/
+static_root/
+
+# IDE Settings 
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db

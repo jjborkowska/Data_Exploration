@@ -1,5 +1,7 @@
-@import "tailwindcss";
-
+body {
+    background-color: #c55757;
+    font-family: Arial, sans-serif;
+}
 .container {
     display: grid;
     margin: 20px;

@@ -1,32 +1,30 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="home_page_style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Strona główna</title>
 </head>
-<body class="home-page">
-    <h1>Witaj na stronie głównej!</h1>
-    <form>
-        <section class="container">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center font-sans">
+    <section class="container">
+        <form>
             <h2>Podaj swoje dane</h2>
             <div class="container">
-                <label for="age">Podaj swój wiek:</label><br>
-                <input type="text" id="age" name="age">
-                <button type="submit">Wyślij</button>
+                <label for="age" class="form-label">Podaj swój wiek:</label><br>
+                <input type="text" id="age" name="age" class="form-input">
             </div>
             <div class="container">
-                <label for="height">Podaj swój wzrost:</label><br>
-                <input type="text" id="height" name="height">
-                <button type="submit">Wyślij</button>
+                <label for="height" class="form-label">Podaj swój wzrost:</label><br>
+                <input type="text" id="height" name="height" class="form-input">
             </div>
             <div class="container">
-                <label for="weight">Podaj swóją wagę:</label><br>
-                <input type="text" id="weight" name="weight">
-                <button type="submit">Wyślij</button>
+                <label for="weight" class="form-label">Podaj swóją wagę:</label><br>
+                <input type="text" id="weight" name="weight" class="form-input">
             </div>
-        </section>
-    </form>
+            <button type="submit" class="form-button">Wyślij</button>
+        </form>
+    </section>
 </body>
 </html>

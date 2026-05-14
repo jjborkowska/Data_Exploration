@@ -1,0 +1,31 @@
+Sport_Code,Sport_Name,Avg_Height_cm,Avg_Weight_kg,Sport_Group
+AQ,Aquatics,177.19,70.32,Yes
+AR,Archery,172.64,68.74,No
+AT,Athletics,176.2,69.07,Yes
+BD,Badminton,173.81,67.5,Yes
+BK,Basketball,190.42,84.73,Yes
+BX,Boxing,172.68,65.19,Yes
+CY,Cycling,175.9,69.43,No
+EQ,Equestrian,174.12,67.51,No
+FB,Football,175.65,70.73,Yes
+FE,Fencing,176.72,70.35,Yes
+GO,Golf,174.4,71.37,No
+GY,Gymnastics,162.81,53.83,No
+HB,Handball,182.19,79.88,Yes
+HO,Hockey,172.9,68.6,Yes
+IH,Ice Hockey,178.37,79.37,Yes
+JU,Judo,173.62,77.26,Yes
+MP,Modern Pentathlon,177.39,69.36,Yes
+RO,Rowing,183.73,79.34,Yes
+RU,Rugby,175.22,78.63,Yes
+SA,Sailing,178.02,75.41,No
+SB,Baseball/Softball,178.33,79.61,Yes
+SH,Shooting,173.47,73.72,No
+SI,Skiing,173.54,68.42,No
+SK,Skating,171.3,65.1,No
+TE,Tennis,179.28,71.32,Yes
+TK,Taekwondo,176.41,67.01,Yes
+TT,Table Tennis,171.03,64.6,Yes
+VB,Volleyball,186.29,78.16,Yes
+WL,Weightlifting,167.48,77.97,No
+WR,Wrestling,171.93,74.64,Yes

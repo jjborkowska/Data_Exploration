@@ -15,6 +15,10 @@ def submit_form(request):
         activity_level = request.POST.get('activity_level')
         budget = request.POST.get('budget')
         like_animals = request.POST.get('like_animals')
+
+        if not age or not height or not weight:
+            return render(request, 'home_page.html', {'error': 'Please fill in all fields.'})
+
         context = {
             'age': age,
             'height': height,

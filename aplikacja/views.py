@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from .analysis import match_results_with_data
 
 def index(request):
-    return render(request, 'home_page.html')
+    return render(request, 'aplikacja/index.html')
 
 def submit_form(request):
     if request.method == 'POST':
@@ -16,7 +16,7 @@ def submit_form(request):
         like_animals = request.POST.get('like_animals')
 
         if not age or not height or not weight:
-            return render(request, 'home_page.html', {'error': 'Please fill in all fields.'})
+            return render(request, 'aplikacja/index.html', {'error': 'Please fill in all fields.'})
         
         recommendation = match_results_with_data(age, height, weight, activity_level, budget, like_animals)
 

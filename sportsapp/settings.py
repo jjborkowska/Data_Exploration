@@ -20,12 +20,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3@vsmn-d78#$9%e66%*4lf-@%hu^a1igaisa1bodzjt9@k04m^'
+# SECRET_KEY = 'django-insecure-3@vsmn-d78#$9%e66%*4lf-@%hu^a1igaisa1bodzjt9@k04m^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+
+import os
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-3@vsmn-d78#$9%e66%*4lf-@%hu^a1igaisa1bodzjt9@k04m^')
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
+
+# Allows your Azure URL to access the app
+ALLOWED_HOSTS = [os.environ.get('WEBSITE_HOSTNAME', 'localhost'), '127.0.0.1']
 
 
 # Application definition

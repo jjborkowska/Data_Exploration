@@ -1,14 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
-# Create your views here.
-
+from .analysis import match_results_with_data
 
 def index(request):
     return render(request, 'home_page.html')
 
 def submit_form(request):
     if request.method == 'POST':
+
         age = request.POST.get('age')
         height = request.POST.get('height')
         weight = request.POST.get('weight')
@@ -18,8 +17,11 @@ def submit_form(request):
 
         if not age or not height or not weight:
             return render(request, 'home_page.html', {'error': 'Please fill in all fields.'})
+        
+        recommendation = match_results_with_data(age, height, weight, activity_level, budget, like_animals)
 
         context = {
+            'recommendation': recommendation,
             'age': age,
             'height': height,
             'weight': weight,
@@ -30,4 +32,3 @@ def submit_form(request):
         return render(request, 'results.html', context)
     else:
         return HttpResponse('Invalid request method.')
-    

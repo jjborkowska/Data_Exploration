@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from pathlib import Path
 from aplikacja.silnik_sportowcy import build_profile_from_post, recommend
 
+from django.contrib import messages # test
+
 def index(request):
     return render(request, 'aplikacja/index.html')
 
@@ -16,7 +18,8 @@ def submit_form(request):
         like_animals = request.POST.get('like_animals')
 
         if not age or not height or not weight:
-            return render(request, 'aplikacja/index.html', {'error': 'Please fill in all fields.'})
+            messages.error(request, 'Please fill in all fields.')
+            return redirect('index')
 
         user = build_profile_from_post(request.POST)
 
@@ -34,4 +37,4 @@ def submit_form(request):
         }
         return render(request, 'results.html', context)
     else:
-        return HttpResponse('Invalid request method.')
+        return HttpResponse('Invalid request method.', status=405) # added status

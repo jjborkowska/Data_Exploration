@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from pathlib import Path
 from aplikacja.silnik_sportowcy import build_profile_from_post, recommend

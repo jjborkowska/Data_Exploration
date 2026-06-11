@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Your Next Sport</title>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center font-sans">
+    <section class="flex flex-col items-center bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <form method="post" action="{% url 'submit_form' %}" class="w-full">
+            {% csrf_token %}
+            <h2 class="text-2xl font-bold mb-4">Please enter your personal details</h2>
+            <div class="container mb-4">
+                <label for="age" class="block text-gray-700 font-bold mb-1">Input your age:</label><br>
+                <input type="number" min="0" max="125" id="age" name="age" class="border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="container mb-4">
+                <label for="height" class="block text-gray-700 font-bold mb-1">Input your height (in cm):</label><br>
+                <input type="number" min="0" max="300" id="height" name="height" class="border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="container mb-4">
+                <label for="weight" class="block text-gray-700 font-bold mb-1">Input your weight (in kg):</label><br>
+                <input type="number" min="0" max="650" id="weight" name="weight" class="border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="container mb-4">
+                <label for="activity_level" class="block text-gray-700 font-bold mb-1">Input your activity level:</label><br>
+                <select id="activity_level" name="activity_level" class="border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+            <div class="flex flex-col items-center gap-4 p-8 mb-2 bg-white border border-gray-300 rounded-xl">
+                <label for="budget" class="block text-gray-700 font-bold mb-1">How much money are you willing to spend per month (in zł)?</label>
+                <span class="text-gray-700 text-2xl font-bold" id="currentValue">100</span>
+                <input 
+                    type="range" 
+                    id="slider"
+                    name="budget"
+                    min="0" max="1000" value="100"
+                    class="w-48 accent-green-400 cursor-pointer"
+                    oninput="document.getElementById('currentValue').textContent = this.value"
+                >
+                <span class="text-gray-400 text-sm">0 — 1000 zł</span>
+            </div>
+            <div class="container mb-4">
+                <label for="like_animals" class="block text-gray-700 font-bold mb-1">Do you like animals?</label><br>
+                <select id="like_animals" name="like_animals" class="border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            {% if error %}
+                <p class="text-red-500 mb-4">{{ error }}</p>
+            {% endif %}
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+        </form>
+    </section>
+</body>
+</html>

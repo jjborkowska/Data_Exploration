@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import HttpResponse
-from .analysis import match_results_with_data
+from pathlib import Path
+from aplikacja.silnik_sportowcy import build_profile_from_post, recommend
 
 from django.contrib import messages # test
 
@@ -9,7 +10,6 @@ def index(request):
 
 def submit_form(request):
     if request.method == 'POST':
-
         age = request.POST.get('age')
         height = request.POST.get('height')
         weight = request.POST.get('weight')
@@ -18,15 +18,16 @@ def submit_form(request):
         like_animals = request.POST.get('like_animals')
 
         if not age or not height or not weight:
-
             messages.error(request, 'Please fill in all fields.')
             return redirect('index')
-            # return render(request, 'aplikacja/index.html', {'error': 'Please fill in all fields.'})
-        
-        recommendation = match_results_with_data(age, height, weight, activity_level, budget, like_animals)
+
+        user = build_profile_from_post(request.POST)
+
+        csv_path = Path(__file__).resolve().parent.parent / 'aplikacja' / 'sport_averages.csv'
+        results = recommend(user, csv_path=csv_path, top_n=5)
 
         context = {
-            'recommendation': recommendation,
+            'results': results,
             'age': age,
             'height': height,
             'weight': weight,

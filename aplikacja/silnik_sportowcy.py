@@ -1,4 +1,3 @@
-
 import csv
 import math
 from dataclasses import dataclass
@@ -45,7 +44,7 @@ class Recommendation:
 # Dodatkowe atrybuty per Sport_Code, których nie ma w CSV
 _EXTRA: dict[str, dict] = {
     "AQ": dict(min_budget_pln=100,  outdoor=False, involves_animals=False, intensity="high",  min_age=5),
-    "AR": dict(min_budget_pln=200,  outdoor=True,  involves_animals=False, intensity="low",   min_age=10),
+    "AR": dict(min_budget_pln=200,  outdoor=True,  involves_animals=False, intensity="medium",   min_age=10),
     "AT": dict(min_budget_pln=50,   outdoor=True,  involves_animals=False, intensity="high",  min_age=8),
     "BD": dict(min_budget_pln=80,   outdoor=False, involves_animals=False, intensity="medium",min_age=6),
     "BK": dict(min_budget_pln=100,  outdoor=False, involves_animals=False, intensity="high",  min_age=8),

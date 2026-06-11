@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .analysis import match_results_with_data
 
+from django.contrib import messages # test
+
 def index(request):
     return render(request, 'aplikacja/index.html')
 
@@ -16,7 +18,10 @@ def submit_form(request):
         like_animals = request.POST.get('like_animals')
 
         if not age or not height or not weight:
-            return render(request, 'aplikacja/index.html', {'error': 'Please fill in all fields.'})
+
+            messages.error(request, 'Please fill in all fields.')
+            return redirect('index')
+            # return render(request, 'aplikacja/index.html', {'error': 'Please fill in all fields.'})
         
         recommendation = match_results_with_data(age, height, weight, activity_level, budget, like_animals)
 
@@ -31,4 +36,4 @@ def submit_form(request):
         }
         return render(request, 'results.html', context)
     else:
-        return HttpResponse('Invalid request method.')
+        return HttpResponse('Invalid request method.', status=405) # added status

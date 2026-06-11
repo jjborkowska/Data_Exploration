@@ -33,8 +33,13 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-3@vsmn-d78#$9%
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 # Allows your Azure URL to access the app
-ALLOWED_HOSTS = [os.environ.get('WEBSITE_HOSTNAME', 'localhost'), '127.0.0.1']
+ALLOWED_HOSTS = ['https://your-next-sport-adasdsaza0azb5ce.polandcentral-01.azurewebsites.net', 'localhost', '127.0.0.1']
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://your-next-sport-adasdsaza0azb5ce.polandcentral-01.azurewebsites.net',
+]
 
 # Application definition
 

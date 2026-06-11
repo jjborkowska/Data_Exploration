@@ -63,4 +63,4 @@ jobs:
         with:
           app-name: 'your-next-sport'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0180E11F522B48B0BBB10AA72BD8BB96 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_056F3B6AC10646779D7BF2B7732E41AF }}

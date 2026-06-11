@@ -39,7 +39,7 @@
                 {% if rec.reasons %}
                 <ul class="text-sm text-green-700 space-y-1 mb-1">
                     {% for reason in rec.reasons %}
-                    <li>✔ {{ reason }}</li>
+                    <li>✔️{{ reason }}</li>
                     {% endfor %}
                 </ul>
                 {% endif %}
@@ -47,7 +47,7 @@
                 {% if rec.warnings %}
                 <ul class="text-sm text-orange-600 space-y-1">
                     {% for warning in rec.warnings %}
-                    <li>⚠ {{ warning }}</li>
+                    <li>❌{{ warning }}</li>
                     {% endfor %}
                 </ul>
                 {% endif %}

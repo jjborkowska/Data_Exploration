@@ -39,6 +39,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_TRUSTED_ORIGINS = [
     'https://your-next-sport-adasdsaza0azb5ce.polandcentral-01.azurewebsites.net',
+    'http://your-next-sport-adasdsaza0azb5ce.polandcentral-01.azurewebsites.net',
 ]
 
 # Application definition

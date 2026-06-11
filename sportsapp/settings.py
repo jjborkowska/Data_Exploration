@@ -42,6 +42,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://your-next-sport-adasdsaza0azb5ce.polandcentral-01.azurewebsites.net',
 ]
 
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 # Application definition
 
 INSTALLED_APPS = [

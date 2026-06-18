@@ -11,7 +11,7 @@ class Sport:
     avg_weight_kg: float
     team_sport: bool
 
-    # Attributes added heuristically for each sport
+    # Attributes read directly from the enriched CSV
     min_budget_pln: int       # minimum monthly cost in PLN
     outdoor: bool             # whether the sport is played outdoors
     involves_animals: bool    # whether it requires contact with animals
@@ -38,42 +38,14 @@ class Recommendation:
 
 
 # ---------------------------------------------------------------------------
-# Loading data from CSV + enriching with heuristics
+# Loading data from the enriched CSV
 # ---------------------------------------------------------------------------
+# Expected columns: Sport_Code, Sport_Name, Avg_Height_cm, Avg_Weight_kg,
+# Sport_Group, Min_Budget_PLN, Outdoor, Involves_Animals, Intensity, Min_Age
+# (produced by enrich_sport_csv.py)
 
-# Extra attributes per Sport_Code, not present in the CSV
-_EXTRA: dict[str, dict] = {
-    "AQ": dict(min_budget_pln=100,  outdoor=False, involves_animals=False, intensity="high",  min_age=5),
-    "AR": dict(min_budget_pln=200,  outdoor=True,  involves_animals=False, intensity="medium",   min_age=10),
-    "AT": dict(min_budget_pln=50,   outdoor=True,  involves_animals=False, intensity="high",  min_age=8),
-    "BD": dict(min_budget_pln=80,   outdoor=False, involves_animals=False, intensity="medium",min_age=6),
-    "BK": dict(min_budget_pln=100,  outdoor=False, involves_animals=False, intensity="high",  min_age=8),
-    "BX": dict(min_budget_pln=150,  outdoor=False, involves_animals=False, intensity="high",  min_age=12),
-    "CY": dict(min_budget_pln=300,  outdoor=True,  involves_animals=False, intensity="high",  min_age=6),
-    "EQ": dict(min_budget_pln=800,  outdoor=True,  involves_animals=True,  intensity="medium",min_age=6),
-    "FB": dict(min_budget_pln=80,   outdoor=True,  involves_animals=False, intensity="high",  min_age=6),
-    "FE": dict(min_budget_pln=250,  outdoor=False, involves_animals=False, intensity="medium",min_age=8),
-    "GO": dict(min_budget_pln=400,  outdoor=True,  involves_animals=False, intensity="low",   min_age=8),
-    "GY": dict(min_budget_pln=150,  outdoor=False, involves_animals=False, intensity="high",  min_age=4),
-    "HB": dict(min_budget_pln=100,  outdoor=False, involves_animals=False, intensity="high",  min_age=8),
-    "HO": dict(min_budget_pln=150,  outdoor=True,  involves_animals=False, intensity="high",  min_age=8),
-    "IH": dict(min_budget_pln=300,  outdoor=False, involves_animals=False, intensity="high",  min_age=5),
-    "JU": dict(min_budget_pln=120,  outdoor=False, involves_animals=False, intensity="high",  min_age=6),
-    "MP": dict(min_budget_pln=500,  outdoor=True,  involves_animals=True,  intensity="high",  min_age=14),
-    "RO": dict(min_budget_pln=200,  outdoor=True,  involves_animals=False, intensity="high",  min_age=12),
-    "RU": dict(min_budget_pln=100,  outdoor=True,  involves_animals=False, intensity="high",  min_age=10),
-    "SA": dict(min_budget_pln=500,  outdoor=True,  involves_animals=False, intensity="medium",min_age=8),
-    "SB": dict(min_budget_pln=150,  outdoor=True,  involves_animals=False, intensity="medium",min_age=6),
-    "SH": dict(min_budget_pln=300,  outdoor=True,  involves_animals=False, intensity="low",   min_age=12),
-    "SI": dict(min_budget_pln=400,  outdoor=True,  involves_animals=False, intensity="high",  min_age=5),
-    "SK": dict(min_budget_pln=200,  outdoor=False, involves_animals=False, intensity="medium",min_age=5),
-    "TE": dict(min_budget_pln=150,  outdoor=True,  involves_animals=False, intensity="medium",min_age=6),
-    "TK": dict(min_budget_pln=120,  outdoor=False, involves_animals=False, intensity="high",  min_age=5),
-    "TT": dict(min_budget_pln=60,   outdoor=False, involves_animals=False, intensity="medium",min_age=6),
-    "VB": dict(min_budget_pln=100,  outdoor=True,  involves_animals=False, intensity="high",  min_age=8),
-    "WL": dict(min_budget_pln=100,  outdoor=False, involves_animals=False, intensity="high",  min_age=14),
-    "WR": dict(min_budget_pln=100,  outdoor=False, involves_animals=False, intensity="high",  min_age=8),
-}
+def _to_bool(value: str) -> bool:
+    return value.strip().lower() == "yes"
 
 
 def load_sports(csv_path: str | Path) -> list[Sport]:
@@ -81,19 +53,17 @@ def load_sports(csv_path: str | Path) -> list[Sport]:
     with open(csv_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            code = row["Sport_Code"].strip()
-            extra = _EXTRA.get(code, {})
             sports.append(Sport(
-                code=code,
+                code=row["Sport_Code"].strip(),
                 name=row["Sport_Name"].strip(),
                 avg_height_cm=float(row["Avg_Height_cm"]),
                 avg_weight_kg=float(row["Avg_Weight_kg"]),
-                team_sport=(row["Sport_Group"].strip().lower() == "yes"),
-                min_budget_pln=extra.get("min_budget_pln", 200),
-                outdoor=extra.get("outdoor", False),
-                involves_animals=extra.get("involves_animals", False),
-                intensity=extra.get("intensity", "medium"),
-                min_age=extra.get("min_age", 6),
+                team_sport=_to_bool(row["Sport_Group"]),
+                min_budget_pln=int(row["Min_Budget_PLN"]),
+                outdoor=_to_bool(row["Outdoor"]),
+                involves_animals=_to_bool(row["Involves_Animals"]),
+                intensity=row["Intensity"].strip().lower(),
+                min_age=int(row["Min_Age"]),
             ))
     return sports
 
@@ -223,7 +193,7 @@ def score_sport(user: UserProfile, sport: Sport) -> Recommendation:
 
 def recommend(
     user: UserProfile,
-    csv_path: str | Path = "sport_averages.csv",
+    csv_path: str | Path = "sport_averages_final.csv",
     top_n: int = 5,
 ) -> list[Recommendation]:
     """
@@ -249,7 +219,7 @@ def build_profile_from_post(post_data: dict) -> UserProfile:
         def submit_form(request):
             if request.method == "POST":
                 user = build_profile_from_post(request.POST)
-                results = recommend(user, csv_path="sport_averages.csv", top_n=5)
+                results = recommend(user, csv_path="sport_averages_final.csv", top_n=5)
                 return render(request, "results.html", {"results": results})
     """
     return UserProfile(
@@ -310,7 +280,6 @@ if __name__ == "__main__":
               "activity=high, budget=200 PLN, doesn't like animals).")
         print("You can pass your own data: python sport_recommender.py "
               "<age> <height_cm> <weight_kg> <activity> <budget_pln> <likes_animals>")
-
 
     csv_file = Path(__file__).parent / "sport_averages_final.csv"
     if not csv_file.exists():

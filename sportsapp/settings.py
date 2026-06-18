@@ -23,9 +23,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = 'django-insecure-3@vsmn-d78#$9%e66%*4lf-@%hu^a1igaisa1bodzjt9@k04m^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-
-# ALLOWED_HOSTS = []
 
 import os
 
@@ -33,8 +30,18 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-3@vsmn-d78#$9%
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 # Allows your Azure URL to access the app
-ALLOWED_HOSTS = [os.environ.get('WEBSITE_HOSTNAME', 'localhost'), '127.0.0.1']
+ALLOWED_HOSTS = ['your-next-sport-adasdsaza0azb5ce.polandcentral-01.azurewebsites.net', 'localhost', '127.0.0.1']
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://your-next-sport-adasdsaza0azb5ce.polandcentral-01.azurewebsites.net',
+    'http://your-next-sport-adasdsaza0azb5ce.polandcentral-01.azurewebsites.net',
+]
+
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # Application definition
 

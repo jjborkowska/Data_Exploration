@@ -11,12 +11,12 @@ class Sport:
     avg_weight_kg: float
     team_sport: bool
 
-    # Atrybuty uzupełnione heurystycznie dla każdego sportu
-    min_budget_pln: int       # miesięczny koszt startowy w PLN
-    outdoor: bool             # czy sport odbywa się na zewnątrz
-    involves_animals: bool    # czy wymaga kontaktu ze zwierzętami
+    # Attributes added heuristically for each sport
+    min_budget_pln: int       # minimum monthly cost in PLN
+    outdoor: bool             # whether the sport is played outdoors
+    involves_animals: bool    # whether it requires contact with animals
     intensity: str            # "low" | "medium" | "high"
-    min_age: int              # minimalny rozsądny wiek startowy
+    min_age: int              # reasonable minimum starting age
 
 
 @dataclass
@@ -38,10 +38,10 @@ class Recommendation:
 
 
 # ---------------------------------------------------------------------------
-# Wczytywanie danych z CSV + wzbogacanie heurystykami
+# Loading data from CSV + enriching with heuristics
 # ---------------------------------------------------------------------------
 
-# Dodatkowe atrybuty per Sport_Code, których nie ma w CSV
+# Extra attributes per Sport_Code, not present in the CSV
 _EXTRA: dict[str, dict] = {
     "AQ": dict(min_budget_pln=100,  outdoor=False, involves_animals=False, intensity="high",  min_age=5),
     "AR": dict(min_budget_pln=200,  outdoor=True,  involves_animals=False, intensity="medium",   min_age=10),
@@ -99,59 +99,59 @@ def load_sports(csv_path: str | Path) -> list[Sport]:
 
 
 # ---------------------------------------------------------------------------
-# Silnik punktacji
+# Scoring engine
 # ---------------------------------------------------------------------------
 
 def _score_physique(user: UserProfile, sport: Sport) -> tuple[float, list[str], list[str]]:
     """
-    Porównuje wzrost i wagę użytkownika ze średnią sportowców danej dyscypliny.
-    Zwraca (punkty 0–40, powody, ostrzeżenia).
+    Compares the user's height and weight against the average for athletes in this sport.
+    Returns (points 0-40, reasons, warnings).
     """
     reasons, warnings = [], []
 
     h_diff = abs(user.height_cm - sport.avg_height_cm)
     w_diff = abs(user.weight_kg - sport.avg_weight_kg)
 
-    # Wzrost – odchylenie w procentach od średniej
+    # Height - percentage deviation from the average
     h_pct = h_diff / sport.avg_height_cm * 100
     w_pct = w_diff / sport.avg_weight_kg * 100
 
-    # Funkcja kary: 0 odchylenia → 20 pkt, 20 % odchylenia → 0 pkt
+    # Penalty function: 0% deviation -> 20 pts, 20% deviation -> 0 pts
     h_pts = max(0.0, 20 - h_pct)
     w_pts = max(0.0, 20 - w_pct)
 
     score = h_pts + w_pts  # max 40
 
     if h_pct < 5:
-        reasons.append(f"Twój wzrost ({user.height_cm} cm) idealnie pasuje do średniej w {sport.name} ({sport.avg_height_cm} cm).")
+        reasons.append(f"Your height ({user.height_cm} cm) is a great match for the {sport.name} average ({sport.avg_height_cm} cm).")
     elif h_pct < 15:
-        reasons.append(f"Twój wzrost jest zbliżony do typowego w {sport.name}.")
+        reasons.append(f"Your height is close to the typical range for {sport.name}.")
     else:
-        warnings.append(f"Twój wzrost odbiega o {h_pct:.0f}% od średniej zawodników {sport.name}.")
+        warnings.append(f"Your height deviates by {h_pct:.0f}% from the average {sport.name} athlete.")
 
     if w_pct < 5:
-        reasons.append(f"Twoja waga ({user.weight_kg} kg) idealnie pasuje do profilu {sport.name}.")
+        reasons.append(f"Your weight ({user.weight_kg} kg) is a great match for the {sport.name} profile.")
     elif w_pct < 15:
-        reasons.append(f"Twoja waga jest zbliżona do typowej w {sport.name}.")
+        reasons.append(f"Your weight is close to the typical range for {sport.name}.")
     else:
-        warnings.append(f"Twoja waga odbiega o {w_pct:.0f}% od średniej zawodników {sport.name}.")
+        warnings.append(f"Your weight deviates by {w_pct:.0f}% from the average {sport.name} athlete.")
 
     return score, reasons, warnings
 
 
 def _score_activity(user: UserProfile, sport: Sport) -> tuple[float, list[str], list[str]]:
-    """Dopasowanie poziomu aktywności do intensywności sportu. Max 25 pkt."""
+    """Match between the user's activity level and the sport's intensity. Max 25 pts."""
     reasons, warnings = [], []
     order = {"low": 0, "medium": 1, "high": 2}
     diff = abs(order[user.activity_level] - order[sport.intensity])
-    score = 25 - diff * 10  # 0→25, 1→15, 2→5
+    score = 25 - diff * 10  # 0->25, 1->15, 2->5
 
     if diff == 0:
-        reasons.append(f"Twój poziom aktywności ({user.activity_level}) idealnie odpowiada wymaganiom {sport.name}.")
+        reasons.append(f"Your activity level ({user.activity_level}) is a perfect match for {sport.name}.")
     elif diff == 1:
-        reasons.append(f"Twój poziom aktywności jest zbliżony do wymagań {sport.name}.")
+        reasons.append(f"Your activity level is reasonably close to what {sport.name} requires.")
     else:
-        warnings.append(f"Intensywność {sport.name} ({sport.intensity}) mocno różni się od Twojego poziomu aktywności.")
+        warnings.append(f"The intensity of {sport.name} ({sport.intensity}) is quite different from your activity level.")
 
     return float(score), reasons, warnings
 
@@ -160,38 +160,38 @@ def _score_budget(user: UserProfile, sport: Sport) -> tuple[float, list[str], li
     reasons, warnings = [], []
     if user.budget_pln >= sport.min_budget_pln:
         score = 20.0
-        reasons.append(f"Twój budżet ({user.budget_pln} zł/mies.) pokrywa koszty {sport.name} (min. {sport.min_budget_pln} zł/mies.).")
+        reasons.append(f"Your budget ({user.budget_pln} PLN/month) covers the cost of {sport.name} (min. {sport.min_budget_pln} PLN/month).")
     else:
         ratio = user.budget_pln / sport.min_budget_pln
         score = 20.0 * ratio
-        warnings.append(f"Minimalny koszt {sport.name} to ~{sport.min_budget_pln} zł/mies., a Twój budżet to {user.budget_pln} zł.")
+        warnings.append(f"The minimum cost for {sport.name} is ~{sport.min_budget_pln} PLN/month, but your budget is {user.budget_pln} PLN.")
     return score, reasons, warnings
 
 
 def _score_animals(user: UserProfile, sport: Sport) -> tuple[float, list[str], list[str]]:
-    """Bonus/kara za sporty ze zwierzętami. Max 5 pkt."""
+    """Bonus/penalty for sports involving animals. Max 5 pts."""
     reasons, warnings = [], []
     if sport.involves_animals and user.like_animals:
-        reasons.append(f"{sport.name} angażuje zwierzęta – idealne, bo je lubisz!")
+        reasons.append(f"{sport.name} involves animals - a great fit since you like them!")
         return 5.0, reasons, warnings
     if sport.involves_animals and not user.like_animals:
-        warnings.append(f"{sport.name} wymaga pracy ze zwierzętami, a Ty ich nie lubisz.")
+        warnings.append(f"{sport.name} requires working with animals, and you don't like them.")
         return -10.0, reasons, warnings
     return 0.0, reasons, warnings
 
 
 def _score_age(user: UserProfile, sport: Sport) -> tuple[float, list[str], list[str]]:
-    """Czy wiek jest odpowiedni. Brak bonusu, tylko ewentualna kara."""
+    """Whether the age is appropriate. No bonus, only a possible penalty."""
     reasons, warnings = [], []
     if user.age < sport.min_age:
-        warnings.append(f"Zalecany wiek startowy w {sport.name} to min. {sport.min_age} lat.")
+        warnings.append(f"The recommended starting age for {sport.name} is at least {sport.min_age} years.")
         return -15.0, reasons, warnings
-    # Dla starszych użytkowników faworyzuj sporty o niskiej intensywności
+    # Favor low-intensity sports for older users
     if user.age > 50 and sport.intensity == "low":
-        reasons.append(f"{sport.name} to dobry wybór dla aktywnych dorosłych (niższa intensywność).")
+        reasons.append(f"{sport.name} is a great choice for active adults (lower intensity).")
         return 5.0, reasons, warnings
     if user.age > 50 and sport.intensity == "high":
-        warnings.append(f"{sport.name} to sport o wysokiej intensywności – skonsultuj z lekarzem.")
+        warnings.append(f"{sport.name} is a high-intensity sport - consider checking with a doctor.")
     return 0.0, reasons, warnings
 
 
@@ -206,7 +206,7 @@ def score_sport(user: UserProfile, sport: Sport) -> Recommendation:
         all_reasons.extend(r)
         all_warnings.extend(w)
 
-    # Normalizacja do 0–100 (max teoretyczne ~90 bez bonusów za zwierzęta/wiek)
+    # Normalize to 0-100 (theoretical max ~90 without animal/age bonuses)
     normalized = max(0.0, min(100.0, total / 90 * 100))
 
     return Recommendation(
@@ -218,7 +218,7 @@ def score_sport(user: UserProfile, sport: Sport) -> Recommendation:
 
 
 # ---------------------------------------------------------------------------
-# Główna funkcja rekomendacji
+# Main recommendation function
 # ---------------------------------------------------------------------------
 
 def recommend(
@@ -227,7 +227,7 @@ def recommend(
     top_n: int = 5,
 ) -> list[Recommendation]:
     """
-    Zwraca listę top_n rekomendowanych sportów posortowanych malejąco po score.
+    Returns a list of the top_n recommended sports, sorted by score in descending order.
     """
     sports = load_sports(csv_path)
     recommendations = [score_sport(user, s) for s in sports]
@@ -236,14 +236,14 @@ def recommend(
 
 
 # ---------------------------------------------------------------------------
-# Integracja z Django (widok)
+# Django integration (view)
 # ---------------------------------------------------------------------------
 
 def build_profile_from_post(post_data: dict) -> UserProfile:
     """
-    Tworzy UserProfile z danych przesłanych przez formularz Django (request.POST).
+    Builds a UserProfile from data submitted through the Django form (request.POST).
 
-    Przykład użycia w views.py:
+    Example usage in views.py:
         from sport_recommender import build_profile_from_post, recommend
 
         def submit_form(request):
@@ -263,30 +263,30 @@ def build_profile_from_post(post_data: dict) -> UserProfile:
 
 
 # ---------------------------------------------------------------------------
-# CLI / demonstracja
+# CLI / demo
 # ---------------------------------------------------------------------------
 
 def _print_results(results: list[Recommendation]) -> None:
     print("\n" + "=" * 60)
-    print("  TOP REKOMENDOWANE SPORTY")
+    print("  TOP RECOMMENDED SPORTS")
     print("=" * 60)
     for i, rec in enumerate(results, 1):
         sport = rec.sport
-        print(f"\n#{i}  {sport.name} ({sport.code})  —  Wynik: {rec.score}/100")
-        print(f"    Intensywność: {sport.intensity} | "
-              f"Drużynowy: {'tak' if sport.team_sport else 'nie'} | "
-              f"Min. budżet: {sport.min_budget_pln} zł/mies.")
+        print(f"\n#{i}  {sport.name} ({sport.code})  -  Score: {rec.score}/100")
+        print(f"    Intensity: {sport.intensity} | "
+              f"Team sport: {'yes' if sport.team_sport else 'no'} | "
+              f"Min. budget: {sport.min_budget_pln} PLN/month")
         for r in rec.reasons:
-            print(f"    ✔  {r}")
+            print(f"    +  {r}")
         for w in rec.warnings:
-            print(f"    ⚠  {w}")
+            print(f"    !  {w}")
     print("=" * 60)
 
 
 if __name__ == "__main__":
     import sys
 
-    # Przykładowy profil – możesz podać jako argumenty CLI lub zmienić poniżej
+    # Example profile - you can pass it as CLI arguments or edit it below
     if len(sys.argv) == 7:
         profile = UserProfile(
             age=int(sys.argv[1]),
@@ -297,7 +297,7 @@ if __name__ == "__main__":
             like_animals=sys.argv[6].lower() == "yes",
         )
     else:
-        # Domyślny przykład
+        # Default example
         profile = UserProfile(
             age=28,
             height_cm=182,
@@ -306,15 +306,15 @@ if __name__ == "__main__":
             budget_pln=200,
             like_animals=False,
         )
-        print("Używam przykładowego profilu (wiek=28, wzrost=182cm, waga=78kg, "
-              "aktywność=high, budżet=200zł, nie lubi zwierząt).")
-        print("Możesz podać własne dane: python sport_recommender.py "
-              "<wiek> <wzrost_cm> <waga_kg> <aktywność> <budżet_pln> <lubi_zwierzęta>")
+        print("Using the default profile (age=28, height=182cm, weight=78kg, "
+              "activity=high, budget=200 PLN, doesn't like animals).")
+        print("You can pass your own data: python sport_recommender.py "
+              "<age> <height_cm> <weight_kg> <activity> <budget_pln> <likes_animals>")
 
 
     csv_file = Path(__file__).parent / "sport_averages.csv"
     if not csv_file.exists():
-        csv_file = Path("sport_averages.csv")
+        csv_file = Path("sport_averages_final.csv")
 
     results = recommend(profile, csv_path=csv_file, top_n=5)
     _print_results(results)

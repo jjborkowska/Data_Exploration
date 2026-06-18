@@ -1,0 +1,31 @@
+Sport_Code,Sport_Name,Avg_Height_cm,Avg_Weight_kg,Sport_Group,Outdoor,Intensity,Min_Budget_PLN,Outdoor,Involves_Animals,Min_Age
+AQ,Aquatics,177.19,70.32,Yes,No,high,100,No,No,5
+AR,Archery,172.64,68.74,No,Yes,medium,200,Yes,No,10
+AT,Athletics,176.2,69.07,Yes,Yes,high,50,Yes,No,8
+BD,Badminton,173.81,67.5,Yes,No,medium,80,No,No,6
+BK,Basketball,190.42,84.73,Yes,No,high,100,No,No,8
+BX,Boxing,172.68,65.19,Yes,No,high,150,No,No,12
+CY,Cycling,175.9,69.43,No,Yes,high,300,Yes,No,6
+EQ,Equestrian,174.12,67.51,No,Yes,medium,800,Yes,Yes,6
+FB,Football,175.65,70.73,Yes,Yes,high,80,Yes,No,6
+FE,Fencing,176.72,70.35,Yes,No,medium,250,No,No,8
+GO,Golf,174.4,71.37,No,Yes,low,400,Yes,No,8
+GY,Gymnastics,162.81,53.83,No,No,high,150,No,No,4
+HB,Handball,182.19,79.88,Yes,No,high,100,No,No,8
+HO,Hockey,172.9,68.6,Yes,Yes,high,150,Yes,No,8
+IH,Ice Hockey,178.37,79.37,Yes,No,high,300,No,No,5
+JU,Judo,173.62,77.26,Yes,No,high,120,No,No,6
+MP,Modern Pentathlon,177.39,69.36,Yes,Yes,high,500,Yes,Yes,14
+RO,Rowing,183.73,79.34,Yes,Yes,high,200,Yes,No,12
+RU,Rugby,175.22,78.63,Yes,Yes,high,100,Yes,No,10
+SA,Sailing,178.02,75.41,No,Yes,medium,500,Yes,No,8
+SB,Baseball/Softball,178.33,79.61,Yes,Yes,medium,150,Yes,No,6
+SH,Shooting,173.47,73.72,No,Yes,low,300,Yes,No,12
+SI,Skiing,173.54,68.42,No,Yes,high,400,Yes,No,5
+SK,Skating,171.3,65.1,No,No,medium,200,No,No,5
+TE,Tennis,179.28,71.32,Yes,Yes,medium,150,Yes,No,6
+TK,Taekwondo,176.41,67.01,Yes,No,high,120,No,No,5
+TT,Table Tennis,171.03,64.6,Yes,No,medium,60,No,No,6
+VB,Volleyball,186.29,78.16,Yes,Yes,high,100,Yes,No,8
+WL,Weightlifting,167.48,77.97,No,No,high,100,No,No,14
+WR,Wrestling,171.93,74.64,Yes,No,high,100,No,No,8

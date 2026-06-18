@@ -312,7 +312,7 @@ if __name__ == "__main__":
               "<age> <height_cm> <weight_kg> <activity> <budget_pln> <likes_animals>")
 
 
-    csv_file = Path(__file__).parent / "sport_averages.csv"
+    csv_file = Path(__file__).parent / "sport_averages_final.csv"
     if not csv_file.exists():
         csv_file = Path("sport_averages_final.csv")
 

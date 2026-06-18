@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Your Next Sport</title>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center font-sans">
+<body style="background-image: url('{% static "aplikacja/Background_Image.jpg" %}'); background-size: cover; background-repeat: no-repeat; background-position: center;">
     <section class="flex flex-col items-center bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <form method="post" action="{% url 'submit_form' %}" class="w-full">
             {% csrf_token %}

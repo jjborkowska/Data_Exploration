@@ -23,7 +23,7 @@ def submit_form(request):
 
         user = build_profile_from_post(request.POST)
 
-        csv_path = Path(__file__).resolve().parent.parent / 'aplikacja' / 'sport_averages.csv'
+        csv_path = Path(__file__).resolve().parent.parent / 'aplikacja' / 'sport_averages_final.csv'
         results = recommend(user, csv_path=csv_path, top_n=5)
 
         context = {

@@ -4,59 +4,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['Fredoka', 'sans-serif'],
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              coral: { DEFAULT: '#FF6B5B', dark: '#E5503F' },
+              butter: { DEFAULT: '#FFD166', dark: '#F2B705' },
+              mint: { DEFAULT: '#06D6A0', dark: '#04A87D' },
+              plum: '#2D2A4A',
+              cloud: '#FFF9F2',
+            },
+            borderRadius: {
+              blob: '2rem',
+            }
+          }
+        }
+      }
+    </script>
     <title>Your Next Sport</title>
 </head>
-<body style="background-image: url('{% static "aplikacja/Background_Image.jpg" %}'); background-size: cover; background-repeat: no-repeat; background-position: center;">
-    <section class="flex flex-col items-center bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <form method="post" action="{% url 'submit_form' %}" class="w-full">
-            {% csrf_token %}
-            <h2 class="text-2xl font-bold mb-4">Please enter your personal details</h2>
-            <div class="container mb-4">
-                <label for="age" class="block text-gray-700 font-bold mb-1">Input your age:</label><br>
-                <input type="number" min="0" max="125" id="age" name="age" class="border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+<body class="min-h-screen font-sans text-plum" style="background: radial-gradient(circle at 15% 20%, #FFE8C4 0%, #A5CAE6 45%), radial-gradient(circle at 85% 80%, #CFF6E8 0%, #FFF9F2 45%); background-color:#FFF9F2;">
+
+    <div class="min-h-screen flex items-center justify-center px-4 py-10">
+        <section class="relative w-full max-w-lg">
+
+            <div class="absolute -top-8 -left-6 w-16 h-16 bg-butter rounded-full opacity-70 hidden sm:block" aria-hidden="true"></div>
+            <div class="absolute -bottom-10 -right-8 w-24 h-24 bg-mint/40 rounded-full opacity-70 hidden sm:block" aria-hidden="true"></div>
+            <div class="absolute top-1/3 -right-10 w-10 h-10 bg-coral/30 rounded-full opacity-70 hidden sm:block" aria-hidden="true"></div>
+
+            <div class="relative bg-white rounded-[2rem] shadow-[0_8px_0_0_rgba(45,42,74,0.08)] border-2 border-plum/5 p-8 sm:p-10">
+
+                <div class="mb-7 text-center">
+                    <span class="inline-flex items-center gap-1 bg-butter/30 text-coral-dark text-xs font-semibold px-3 py-1 rounded-full mb-3 font-sans tracking-wide">
+                        🎯 60-second match
+                    </span>
+                    <h1 class="font-display font-semibold text-3xl sm:text-4xl text-plum leading-tight">
+                        Find your next sport
+                    </h1>
+                    <p class="text-plum/60 text-sm mt-2">
+                        Answer a few quick questions and we'll match you with sports you'll actually love.
+                    </p>
+                </div>
+
+                <form method="post" action="{% url 'submit_form' %}" class="space-y-5" novalidate>
+                    {% csrf_token %}
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label for="age" class="block text-xs font-semibold text-plum/70 mb-1.5 font-sans">Age</label>
+                            <input type="number" min="0" max="125" id="age" name="age" required
+                                placeholder="25"
+                                class="w-full text-center rounded-2xl border-2 border-plum/10 bg-cloud py-2.5 px-2 font-display text-lg font-medium text-plum placeholder:text-plum/30 focus:outline-none focus:border-coral focus:bg-white transition-colors">
+                        </div>
+                        <div>
+                            <label for="height" class="block text-xs font-semibold text-plum/70 mb-1.5 font-sans">Height <span class="text-plum/40">cm</span></label>
+                            <input type="number" min="0" max="300" id="height" name="height" required
+                                placeholder="170"
+                                class="w-full text-center rounded-2xl border-2 border-plum/10 bg-cloud py-2.5 px-2 font-display text-lg font-medium text-plum placeholder:text-plum/30 focus:outline-none focus:border-coral focus:bg-white transition-colors">
+                        </div>
+                        <div>
+                            <label for="weight" class="block text-xs font-semibold text-plum/70 mb-1.5 font-sans">Weight <span class="text-plum/40">kg</span></label>
+                            <input type="number" min="0" max="650" id="weight" name="weight" required
+                                placeholder="65"
+                                class="w-full text-center rounded-2xl border-2 border-plum/10 bg-cloud py-2.5 px-2 font-display text-lg font-medium text-plum placeholder:text-plum/30 focus:outline-none focus:border-coral focus:bg-white transition-colors">
+                        </div>
+                    </div>
+
+                    <fieldset>
+                        <legend class="block text-xs font-semibold text-plum/70 mb-1.5 font-sans">How active are you day-to-day?</legend>
+                        <div class="grid grid-cols-3 gap-2">
+                            <label class="activity-option">
+                                <input type="radio" name="activity_level" value="low" class="peer sr-only" checked>
+                                <span class="flex flex-col items-center justify-center gap-1 py-3 rounded-2xl border-2 border-plum/10 bg-cloud cursor-pointer peer-checked:border-coral peer-checked:bg-coral/10 transition-colors text-center">
+                                    <span class="text-lg" aria-hidden="true">🌱</span>
+                                    <span class="text-xs font-semibold text-plum">Low</span>
+                                </span>
+                            </label>
+                            <label class="activity-option">
+                                <input type="radio" name="activity_level" value="medium" class="peer sr-only">
+                                <span class="flex flex-col items-center justify-center gap-1 py-3 rounded-2xl border-2 border-plum/10 bg-cloud cursor-pointer peer-checked:border-coral peer-checked:bg-coral/10 transition-colors text-center">
+                                    <span class="text-lg" aria-hidden="true">🚶</span>
+                                    <span class="text-xs font-semibold text-plum">Medium</span>
+                                </span>
+                            </label>
+                            <label class="activity-option">
+                                <input type="radio" name="activity_level" value="high" class="peer sr-only">
+                                <span class="flex flex-col items-center justify-center gap-1 py-3 rounded-2xl border-2 border-plum/10 bg-cloud cursor-pointer peer-checked:border-coral peer-checked:bg-coral/10 transition-colors text-center">
+                                    <span class="text-lg" aria-hidden="true">🔥</span>
+                                    <span class="text-xs font-semibold text-plum">High</span>
+                                </span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div class="rounded-2xl border-2 border-plum/10 bg-cloud px-5 py-5">
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="slider" class="text-xs font-semibold text-plum/70 font-sans">Monthly budget</label>
+                            <span class="text-2xl" id="budgetIcon" aria-hidden="true">🪙</span>
+                        </div>
+                        <div class="flex items-baseline gap-1 mb-3">
+                            <span class="font-display text-3xl font-semibold text-plum" id="currentValue">100</span>
+                            <span class="text-plum/50 text-sm font-sans">zł / month</span>
+                        </div>
+                        <input
+                            type="range"
+                            id="slider"
+                            name="budget"
+                            min="0" max="500" step="10" value="100"
+                            class="w-full h-2 rounded-full appearance-none cursor-pointer bg-plum/10 accent-coral"
+                            oninput="updateBudget(this.value)"
+                        >
+                        <div class="flex justify-between text-[11px] text-plum/40 mt-1.5 font-sans">
+                            <span>0 zł</span>
+                            <span>500 zł</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-plum/70 mb-1.5 font-sans">Do you like animals?</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="activity-option">
+                                <input type="radio" name="like_animals" value="yes" class="peer sr-only" checked>
+                                <span class="flex items-center justify-center gap-2 py-2.5 rounded-2xl border-2 border-plum/10 bg-cloud cursor-pointer peer-checked:border-mint peer-checked:bg-mint/10 transition-colors">
+                                    <span aria-hidden="true">🐾</span>
+                                    <span class="text-sm font-semibold text-plum">Yes</span>
+                                </span>
+                            </label>
+                            <label class="activity-option">
+                                <input type="radio" name="like_animals" value="no" class="peer sr-only">
+                                <span class="flex items-center justify-center gap-2 py-2.5 rounded-2xl border-2 border-plum/10 bg-cloud cursor-pointer peer-checked:border-mint peer-checked:bg-mint/10 transition-colors">
+                                    <span aria-hidden="true">🙅</span>
+                                    <span class="text-sm font-semibold text-plum">No</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    {% if error %}
+                        <p class="text-coral-dark text-sm font-medium bg-coral/10 rounded-xl px-4 py-2.5">{{ error }}</p>
+                    {% endif %}
+
+                    <button type="submit"
+                        class="w-full bg-coral hover:bg-coral-dark text-white font-display font-semibold text-lg py-3.5 rounded-2xl shadow-[0_4px_0_0_#E5503F] hover:shadow-[0_2px_0_0_#E5503F] hover:translate-y-[2px] active:translate-y-[4px] active:shadow-none transition-all duration-100">
+                        Find my sport →
+                    </button>
+                </form>
             </div>
-            <div class="container mb-4">
-                <label for="height" class="block text-gray-700 font-bold mb-1">Input your height (in cm):</label><br>
-                <input type="number" min="0" max="300" id="height" name="height" class="border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div class="container mb-4">
-                <label for="weight" class="block text-gray-700 font-bold mb-1">Input your weight (in kg):</label><br>
-                <input type="number" min="0" max="650" id="weight" name="weight" class="border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div class="container mb-4">
-                <label for="activity_level" class="block text-gray-700 font-bold mb-1">Input your activity level:</label><br>
-                <select id="activity_level" name="activity_level" class="border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                </select>
-            </div>
-            <div class="flex flex-col items-center gap-4 p-8 mb-2 bg-white border border-gray-300 rounded-xl">
-                <label for="budget" class="block text-gray-700 font-bold mb-1">How much money are you willing to spend per month (in zł)?</label>
-                <span class="text-gray-700 text-2xl font-bold" id="currentValue">100</span>
-                <input 
-                    type="range" 
-                    id="slider"
-                    name="budget"
-                    min="0" max="1000" value="100"
-                    class="w-48 accent-green-400 cursor-pointer"
-                    oninput="document.getElementById('currentValue').textContent = this.value"
-                >
-                <span class="text-gray-400 text-sm">0 — 1000 zł</span>
-            </div>
-            <div class="container mb-4">
-                <label for="like_animals" class="block text-gray-700 font-bold mb-1">Do you like animals?</label><br>
-                <select id="like_animals" name="like_animals" class="border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                </select>
-            </div>
-            {% if error %}
-                <p class="text-red-500 mb-4">{{ error }}</p>
-            {% endif %}
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
-        </form>
-    </section>
+        </section>
+    </div>
+
+    <script>
+        function updateBudget(value) {
+            document.getElementById('currentValue').textContent = value;
+            var icon = document.getElementById('budgetIcon');
+            if (value < 125) {
+                icon.textContent = '🪙';
+            } else if (value < 300) {
+                icon.textContent = '💵';
+            } else {
+                icon.textContent = '💎';
+            }
+        }
+    </script>
 </body>
 </html>
